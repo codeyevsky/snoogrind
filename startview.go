@@ -157,7 +157,7 @@ func startSetup(cfg engine.Config) (engine.Config, engine.StartOptions, bool) {
 		} else {
 			f.add("    " + style.Tint(style.Gray, "▶ start"))
 		}
-		footer(f, "  j/k move · Enter edit or start · d rehearse on/off · q cancel")
+		footer(f, "  arrows move · Enter edit or start · d rehearse on/off · q cancel")
 		f.paint()
 
 		b, ok := key()
@@ -174,11 +174,11 @@ func startSetup(cfg engine.Config) (engine.Config, engine.StartOptions, bool) {
 				return cfg, o, true
 			}
 			rows[sel].edit()
-		case 'k':
+		case keyUp:
 			if sel > 0 {
 				sel--
 			}
-		case 'j':
+		case keyDown:
 			if sel < len(rows) {
 				sel++
 			}

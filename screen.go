@@ -146,8 +146,19 @@ func (f *frame) paint() {
 
 // ---------- keyboard ----------
 
-// keyReader turns stdin into a channel of key bytes. Arrow keys arrive as
-// escape sequences; they are folded into the single letters the views use.
+// Arrow and page keys arrive as escape sequences. They are folded into these
+// sentinels, well clear of anything a keyboard sends as a plain byte, so a
+// view can tell a real arrow from someone typing a letter.
+const (
+	keyUp = 0x81 + iota
+	keyDown
+	keyLeft
+	keyRight
+	keyPgUp
+	keyPgDn
+)
+
+// keyReader turns stdin into a channel of key bytes.
 type keyReader struct {
 	ch   chan byte
 	stop chan struct{}
@@ -194,31 +205,23 @@ func newKeyReader() (*keyReader, error) {
 					if i+2 < n {
 						param = buf[i+2]
 					}
+					var mapped byte
 					switch {
 					case final == 'A':
-						if !send('k') {
-							return
-						}
+						mapped = keyUp
 					case final == 'B':
-						if !send('j') {
-							return
-						}
+						mapped = keyDown
 					case final == 'C':
-						if !send('l') {
-							return
-						}
+						mapped = keyRight
 					case final == 'D':
-						if !send('h') {
-							return
-						}
+						mapped = keyLeft
 					case final == '~' && param == '5':
-						if !send('K') { // page up
-							return
-						}
+						mapped = keyPgUp
 					case final == '~' && param == '6':
-						if !send('J') { // page down
-							return
-						}
+						mapped = keyPgDn
+					}
+					if mapped != 0 && !send(mapped) {
+						return
 					}
 					// home, end and the rest: no meaning here
 					i = j + 1
@@ -300,8 +303,8 @@ func footer(f *frame, keys string) {
 
 // ---------- pager ----------
 
-// pager shows a list of lines full screen with j/k scrolling · used wherever a
-// screen's output can run past the bottom of the terminal.
+// pager shows a list of lines full screen, scrolled with the arrows · used
+// wherever a screen's output can run past the bottom of the terminal.
 func pager(title string, lines []string) {
 	if keys == nil {
 		for _, l := range lines {
@@ -335,7 +338,7 @@ func pager(title string, lines []string) {
 		for i := top; i < len(lines) && i < top+body; i++ {
 			f.add(lines[i])
 		}
-		footer(f, "  j/k scroll · Enter or q back")
+		footer(f, "  arrows scroll · Enter or q back")
 		f.paint()
 
 		b, ok := key()
@@ -345,18 +348,14 @@ func pager(title string, lines []string) {
 		switch b {
 		case 'q', '\r', '\n', 3, 0x1b:
 			return
-		case 'j':
+		case keyDown:
 			top++
-		case 'k':
+		case keyUp:
 			top--
-		case 'J', ' ':
+		case keyPgDn, ' ':
 			top += body
-		case 'K':
+		case keyPgUp:
 			top -= body
-		case 'g':
-			top = 0
-		case 'G':
-			top = maxTop
 		}
 	}
 }

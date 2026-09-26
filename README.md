@@ -26,7 +26,7 @@ snoogrind
 ```
 
 Pick **login** first, sign in by hand in the window that opens, then pick a
-grinder. Arrows or `hjkl` move, Enter selects, `q` quits. Inside a run, `p`
+grinder. Arrows move, Enter selects, `q` quits. Inside a run, `p`
 pauses and `s` stops.
 
 `d` toggles **rehearsal mode**: every screen finds the controls it would press
@@ -50,11 +50,3 @@ check with this before turning something loose on your account.
   needs a code, so that one stays yours.
 - **If the markup changes**, runs start reporting `[?]`. Fix `findShareJS` and
   `findCopyJS` in `internal/engine/feed.go`.
-
-Every screen has a subcommand behind it for scripts and ssh: `snoogrind share`,
-`scroll`, `badges`, `login`. `snoogrind --help` lists the flags.
-
-Same family as [`liout`](https://github.com/codeyevsky/liout) and
-[`githubFlex`](https://github.com/codeyevsky/ghFlex).
-
-MIT.

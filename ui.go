@@ -26,7 +26,6 @@ type menuItem struct {
 	cmd   string
 	title string // what the tile says · falls back to cmd
 	desc  string
-	icon  []string // three rows of block art, six columns each
 }
 
 func (m menuItem) label() string {
@@ -217,7 +216,7 @@ func menuView(layout [][]menuItem, panel func() []string, reveal bool) (string, 
 				f.blank()
 			}
 		}
-		footer(f, "  arrows or hjkl move · Enter select · d rehearse on/off · q quit")
+		footer(f, "  arrows move · Enter select · d rehearse on/off · q quit")
 	}
 
 	if reveal {
@@ -240,13 +239,13 @@ func menuView(layout [][]menuItem, panel func() []string, reveal bool) (string, 
 			return layout[row][col].cmd, true
 		case 'd':
 			return "", true // the caller flips dry run and comes straight back
-		case 'h':
+		case keyLeft:
 			col--
-		case 'l':
+		case keyRight:
 			col++
-		case 'k':
+		case keyUp:
 			row--
-		case 'j':
+		case keyDown:
 			row++
 		}
 	}
@@ -273,7 +272,7 @@ func choose(title, label string, options []string, def int) (string, bool) {
 				f.add("    " + style.Tint(style.Gray, o))
 			}
 		}
-		footer(f, "  j/k move · Enter select · Esc cancel")
+		footer(f, "  arrows move · Enter select · Esc cancel")
 		f.paint()
 
 		b, ok := key()
@@ -285,11 +284,11 @@ func choose(title, label string, options []string, def int) (string, bool) {
 			return options[sel], true
 		case 'q', 3, 0x1b:
 			return options[sel], false
-		case 'k':
+		case keyUp:
 			if sel > 0 {
 				sel--
 			}
-		case 'j':
+		case keyDown:
 			if sel < len(options)-1 {
 				sel++
 			}

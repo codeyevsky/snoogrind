@@ -111,7 +111,7 @@ func screenSettings(cfg engine.Config) error {
 				f.add("    " + style.Tint(style.Gray, line))
 			}
 		}
-		footer(f, "  j/k move · Enter edit · q done")
+		footer(f, "  arrows move · Enter edit · q done")
 		f.paint()
 
 		b, ok := key()
@@ -127,18 +127,14 @@ func screenSettings(cfg engine.Config) error {
 			if err := cfg.Save(); err != nil {
 				return err
 			}
-		case 'k':
+		case keyUp:
 			if sel > 0 {
 				sel--
 			}
-		case 'j':
+		case keyDown:
 			if sel < len(items)-1 {
 				sel++
 			}
-		case 'g':
-			sel = 0
-		case 'G':
-			sel = len(items) - 1
 		}
 	}
 }
