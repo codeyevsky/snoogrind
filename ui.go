@@ -1,4 +1,4 @@
-// Full-screen widgets · banner, menu, single-select, text field, confirm.
+// Full screen widgets · banner, menu, single select, text field, confirm.
 // Everything here paints a whole frame and reads raw keys, so no screen ever
 // scrolls away underneath the user.
 
@@ -67,7 +67,7 @@ func revealBanner(panel func(*frame, int)) {
 
 // ---------- menu ----------
 
-// padVis right-pads to w printable columns, counting what the eye sees rather
+// padVis right pads to w printable columns, counting what the eye sees rather
 // than the SGR bytes woven through the string.
 func padVis(s string, w int) string {
 	if n := visLen(s); n < w {
@@ -333,7 +333,7 @@ func input(title, label, def string) (string, bool) {
 	}
 }
 
-// message shows a one-screen result and waits for a keypress.
+// message shows a one screen result and waits for a keypress.
 func message(title string, lines ...string) {
 	pager(title, lines)
 }

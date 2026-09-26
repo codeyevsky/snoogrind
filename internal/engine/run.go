@@ -14,7 +14,7 @@ type EventKind int
 
 const (
 	EvStatus  EventKind = iota // Text: what the run is busy with
-	EvShared                   // Post + Res: share -> copy link went through
+	EvShared                   // Post + Res: share → copy link went through
 	EvSkipped                  // Post: already on record from an earlier run
 	EvFailed                   // Post + Res: the gesture did not complete
 	EvDry                      // Post: dry run, nothing was touched

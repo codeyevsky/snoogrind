@@ -71,7 +71,7 @@ const collectJS = deepJS + `() => {
          p.getAttribute('subreddit-prefixed-name'));
   }
   if (out.length) return out;
-  // older / logged-out feed markup
+  // older / logged out feed markup
   for (const el of document.querySelectorAll('[id^="t3_"]')) {
     const a = el.querySelector('a[href*="/comments/"]');
     const h = el.querySelector('h1, h2, h3, [slot="title"]');
@@ -110,7 +110,7 @@ func (s *Session) Posts() ([]Post, error) {
 }
 
 // findShareJS locates one post's share control. The action bar is not a child
-// of <shreddit-post> — reddit renders it as a sibling — so this matches on the
+// of <shreddit-post>, reddit renders it as a sibling, so this matches on the
 // post's own fullname, which <shreddit-post-share-button> carries as source-id,
 // and then digs the real <button> out of the element's shadow root.
 const findShareJS = deepJS + `({ id, permalink }) => {
@@ -204,7 +204,7 @@ func (s *Session) findShare(p Post, tries int) playwright.ElementHandle {
 	return nil
 }
 
-// handleFor resolves a post back to a live element handle · the feed re-renders
+// handleFor resolves a post back to a live element handle · the feed redraws
 // as it loads, so we look it up again right before acting on it.
 func (s *Session) handleFor(p Post) playwright.ElementHandle {
 	for _, sel := range []string{
@@ -246,7 +246,7 @@ func (s *Session) Share(p Post) ShareResult {
 		return ShareResult{Err: "share click failed: " + short(err.Error())}
 	}
 
-	// The menu is lazy-loaded, so poll for the copy entry instead of guessing.
+	// The menu is lazy loaded, so poll for the copy entry instead of guessing.
 	var item playwright.ElementHandle
 	for i := 0; i < 20 && item == nil; i++ {
 		s.Page.WaitForTimeout(200)
@@ -258,11 +258,11 @@ func (s *Session) Share(p Post) ShareResult {
 	}
 	if item == nil {
 		s.closeMenu()
-		return ShareResult{Err: "share menu opened but had no copy-link entry"}
+		return ShareResult{Err: "share menu opened but had no copy link entry"}
 	}
 	if err := item.Click(playwright.ElementHandleClickOptions{Timeout: playwright.Float(8000)}); err != nil {
 		s.closeMenu()
-		return ShareResult{Err: "copy-link click failed: " + short(err.Error())}
+		return ShareResult{Err: "copy link click failed: " + short(err.Error())}
 	}
 	s.Page.WaitForTimeout(500)
 
@@ -334,8 +334,8 @@ func (s *Session) ScrollPos() (float64, bool) {
 	return num(m["y"]), bottom
 }
 
-// ScrollBy moves the feed down by px with a real wheel event — the gesture a
-// person makes — and reports how far the page actually travelled and whether
+// ScrollBy moves the feed down by px with a real wheel event, the gesture a
+// person makes, and reports how far the page actually travelled and whether
 // it has reached the bottom. When the wheel lands somewhere that does not
 // scroll, it falls back to a scripted scroll so a run never silently stalls.
 func (s *Session) ScrollBy(px int) (moved float64, atBottom bool) {

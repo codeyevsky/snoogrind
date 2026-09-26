@@ -32,17 +32,17 @@ func numField(name, prompt string, get func(engine.Config) int, set func(*engine
 	}
 }
 
-// rangeField edits a min-max pair, which is how every pace setting is spelt.
+// rangeField edits a min and max pair, which is how every pace setting is spelt.
 func rangeField(name, unit, prompt string, get func(engine.Config) (int, int), set func(*engine.Config, int, int)) setting {
 	return setting{
 		name: name,
 		show: func(c engine.Config) string {
 			lo, hi := get(c)
-			return fmt.Sprintf("%d–%d %s", lo, hi, unit)
+			return fmt.Sprintf("%d to %d %s", lo, hi, unit)
 		},
 		edit: func(c *engine.Config) {
 			lo, hi := get(*c)
-			if v, ok := input("settings", prompt, fmt.Sprintf("%d-%d", lo, hi)); ok {
+			if v, ok := input("settings", prompt, fmt.Sprintf("%d %d", lo, hi)); ok {
 				if a, b, ok := parseRange(v); ok {
 					set(c, a, b)
 				}
@@ -56,11 +56,11 @@ func rangeField(name, unit, prompt string, get func(engine.Config) (int, int), s
 // config.json and on the command line, where they belong.
 func settingsList() []setting {
 	return []setting{
-		numField("shares per run", fmt.Sprintf("stop after how many shares? (1–%d)", engine.MaxSharesCap),
+		numField("shares per run", fmt.Sprintf("stop after how many shares? (1 to %d)", engine.MaxSharesCap),
 			func(c engine.Config) int { return c.MaxShares },
 			func(c *engine.Config, n int) { c.MaxShares = n }),
 
-		rangeField("gap between posts", "ms", "gap between posts, ms (min-max)",
+		rangeField("gap between posts", "ms", "gap between posts in ms, two numbers",
 			func(c engine.Config) (int, int) { return c.DelayMin, c.DelayMax },
 			func(c *engine.Config, a, b int) { c.DelayMin, c.DelayMax = a, b }),
 

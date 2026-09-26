@@ -19,7 +19,7 @@ import (
 
 const RedditHome = "https://www.reddit.com/"
 
-// chromePaths lists where a Chrome-family binary usually lives · real Chrome
+// chromePaths lists where a Chrome family binary usually lives · real Chrome
 // first, then Chromium/Brave/Edge, per platform.
 func chromePaths() []string {
 	home, _ := os.UserHomeDir()
@@ -85,7 +85,7 @@ func chromeExe() string {
 }
 
 // DefaultBrowser prefers real Chrome · its clipboard permissions can be granted
-// up front, which is what makes the copy-link check reliable.
+// up front, which is what makes the copy link check reliable.
 func DefaultBrowser() string {
 	if chromeExe() != "" {
 		return "chrome"
@@ -218,8 +218,8 @@ func Open(o Opts) (*Session, error) {
 	ctx.SetDefaultTimeout(45000)
 
 	// Chromium can hand us the clipboard up front; that lets a run verify each
-	// copy-link by reading back the URL. Firefox refuses · we fall back to the
-	// on-page "copied" toast there.
+	// copy link by reading back the URL. Firefox refuses · we fall back to the
+	// on page "copied" toast there.
 	_ = ctx.GrantPermissions([]string{"clipboard-read", "clipboard-write"},
 		playwright.BrowserContextGrantPermissionsOptions{Origin: playwright.String("https://www.reddit.com")})
 
@@ -258,7 +258,7 @@ const whoJS = `async () => {
   } catch (e) { return ""; }
 }`
 
-// Who returns the signed-in username, or "" when logged out.
+// Who returns the signed in username, or "" when logged out.
 func (s *Session) Who() string {
 	v, err := s.Page.Evaluate(whoJS)
 	if err != nil {
@@ -273,7 +273,7 @@ func (s *Session) Who() string {
 func (s *Session) LoggedIn() bool { return s.Who() != "" }
 
 // SignIn opens Reddit and, if needed, waits for the user to log in by hand in
-// the window we opened · progress is called with human-readable status.
+// the window we opened · progress is called with human readable status.
 func (s *Session) SignIn(ctx context.Context, timeout time.Duration, progress func(string)) (string, error) {
 	say := func(m string) {
 		if progress != nil {

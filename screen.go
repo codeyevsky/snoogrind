@@ -1,5 +1,5 @@
-// Full-screen drawing for the TUI · an alternate-screen frame buffer, a pager,
-// a spinner for the slow browser steps, and the live run view. Hand-rolled
+// Full screen drawing for the TUI · an alternate screen frame buffer, a pager,
+// a spinner for the slow browser steps, and the live run view. Hand rolled
 // ANSI, same as the rest of the family.
 
 package main
@@ -99,7 +99,7 @@ func isFinalByte(r rune) bool {
 }
 
 // frame collects the lines of one screen, then paints them in a single pass so
-// the terminal never shows a half-drawn view.
+// the terminal never shows a half drawn view.
 type frame struct {
 	w, h  int
 	lines []string
@@ -242,7 +242,7 @@ func (k *keyReader) close() {
 	_ = term.Restore(k.fd, k.old)
 }
 
-// keys is the one reader the whole TUI session shares. Per-screen readers do
+// keys is the one reader the whole TUI session shares. Per screen readers do
 // not work: closing one leaves its goroutine parked inside os.Stdin.Read, and
 // that goroutine then swallows the first key meant for the next screen.
 var keys *keyReader
@@ -300,7 +300,7 @@ func footer(f *frame, keys string) {
 
 // ---------- pager ----------
 
-// pager shows a list of lines full-screen with j/k scrolling · used wherever a
+// pager shows a list of lines full screen with j/k scrolling · used wherever a
 // screen's output can run past the bottom of the terminal.
 func pager(title string, lines []string) {
 	if keys == nil {
@@ -329,7 +329,7 @@ func pager(title string, lines []string) {
 
 		pos := "all"
 		if len(lines) > body {
-			pos = fmt.Sprintf("%d–%d of %d", top+1, min(top+body, len(lines)), len(lines))
+			pos = fmt.Sprintf("%d to %d of %d", top+1, min(top+body, len(lines)), len(lines))
 		}
 		header(f, title, pos)
 		for i := top; i < len(lines) && i < top+body; i++ {

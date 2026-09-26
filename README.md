@@ -1,7 +1,7 @@
 # snoogrind
 
 Grind Reddit achievements from one terminal UI. It drives a real Chrome or
-Firefox through Playwright and uses the session you are already logged into —
+Firefox through Playwright and uses the session you are already logged into,
 no password, no API token.
 
 <p align="center"><img src="assets/screenshot.png" alt="snoogrind" width="860"></p>
@@ -9,13 +9,13 @@ no password, no API token.
 Three of Reddit's badge ladders are farmable by repeating an action, and
 snoogrind repeats them for you:
 
-- **share** — walks your feed and does share → copy link on every post
-- **scroll** — scrolls for hours and nothing else, for the banana distance
-- **getting started** — the seven newcomer badges in one pass
+- **share** · walks your feed and does share → copy link on every post
+- **scroll** · scrolls for hours and nothing else, for the banana distance
+- **getting started** · the seven newcomer badges in one pass
 
 Same family as [`liout`](https://github.com/codeyevsky/liout) and
 [`githubFlex`](https://github.com/codeyevsky/ghFlex): one binary, one
-full-screen panel, hand-rolled ANSI.
+full screen panel, hand rolled ANSI.
 
 ## Install
 
@@ -38,8 +38,8 @@ Chrome. State and settings live in `~/.local/share/snoogrind/`, or wherever
 snoogrind
 ```
 
-That is the whole interface. Pick **login** first — a browser window opens and
-you sign in by hand — then whichever grinder you want.
+That is the whole interface. Pick **login** first · a browser window opens and
+you sign in by hand · then whichever grinder you want.
 
 | key | |
 | --- | --- |
@@ -55,18 +55,18 @@ let it loose on your account.
 
 ### The screens
 
-- **Menu** — your account, your limits, and the six actions as tiles.
-- **Share** — a live view while it walks the feed: elapsed clock, counters, a
+- **Menu** · your account, your limits, and the six actions as tiles.
+- **Share** · a live view while it walks the feed: elapsed clock, counters, a
   bar against the share limit, and each post scrolling past as it is handled.
   `p` pauses, `s` stops cleanly after the current post, `q` quits the run.
-- **Scroll** — distance travelled, bananas, flicks, posts seen and reloads,
+- **Scroll** · distance travelled, bananas, flicks, posts seen and reloads,
   with the same `p` / `s` / `q`.
-- **Getting started** — a short setup (which subreddits, your profile text,
+- **Getting started** · a short setup (which subreddits, your profile text,
   your banner) and then a checklist that fills in live: `[✓]` earned, `[!]`
   yours to finish, `[x]` could not.
-- **Settings** — four rows: shares per run, gap between posts, scroll session
+- **Settings** · four rows: shares per run, gap between posts, scroll session
   length, browser. Enter edits just the row you are on.
-- **Login** — a spinner with the last status lines, so a slow browser step
+- **Login** · a spinner with the last status lines, so a slow browser step
   never looks like a hang.
 
 ## The achievements
@@ -106,7 +106,7 @@ The share screen shows which tier you are working towards.
 | Detective Doggo | click 10 search results | searches and clicks |
 | Feed Finder | change the feed type on home | flips what the web offers |
 | Profile Perfectionist | banner + description | only with the text and image you give it |
-| Secured Account | verify email or phone | yours — it needs a code |
+| Secured Account | verify email or phone | yours · it needs a code |
 
 A profile is yours: snoogrind fills in the words and the picture you hand it,
 never ones it made up. Verification cannot be automated at all.
@@ -117,16 +117,16 @@ never ones it made up. Verification cannot be automated at all.
 permalink, title and subreddit. Per post: scroll it into view, find its share
 button, **real mouse click**, wait for the menu to load, click "Copy link",
 Escape. The copy is confirmed by reading the clipboard back (`[✓]`); where the
-clipboard is out of reach the on-page "Copied" toast is the fallback (`[+]`).
+clipboard is out of reach the on page "Copied" toast is the fallback (`[+]`).
 Shared post ids go into `state.json`, so a second run skips them.
 
-The action bar is **not** a child of `shreddit-post` — Reddit renders it as a
-sibling — so each post is matched to its own
+The action bar is **not** a child of `shreddit-post` · Reddit renders it as a
+sibling · so each post is matched to its own
 `shreddit-post-share-button[source-id="t3_…"]`, and the search walks open
 shadow roots because the real `<button>` lives inside one.
 
 **Scroll.** Each flick is a real wheel event over the middle of the feed
-(320–900 px, 250–700 ms apart by default), and the distance comes from
+(320 to 900 px, 250 to 700 ms apart by default), and the distance comes from
 `window.scrollY`, converted at the CSS definition of 96 px to the inch. When
 the feed stops producing it waits for the next batch; if it stalls for good it
 reopens the feed and carries on. Totals persist across sessions.
@@ -141,7 +141,7 @@ never by "the first one on the page".
   network security". Windowed is the default for a reason.
 - **A blank profile gets a human check.** The first launch may land on "prove
   your humanity"; snoogrind waits 90 seconds and it usually clears itself. If
-  it does not, solve it once by hand — the profile is persistent, so it will
+  it does not, solve it once by hand · the profile is persistent, so it will
   not ask again. Alternative: point `profile_dir` at a browser profile you
   already use, with that browser closed.
 - **Reddit words the newcomer badges as "via the Reddit app"**, and snoogrind
@@ -149,9 +149,9 @@ never by "the first one on the page".
   register.
 - **The banana number is an estimate.** Reddit has never published how long its
   banana is. snoogrind takes 18 cm (`banana_cm` in `config.json`) and keeps its
-  own count — it cannot read Reddit's counter. Treat it as a good guide, not as
+  own count · it cannot read Reddit's counter. Treat it as a good guide, not as
   the badge's own progress.
-- **Pace.** 50 shares and a 1.2–2.8 s gap by default; set anything up to 1,000.
+- **Pace.** 50 shares and a 1.2 to 2.8 s gap by default; set anything up to 1,000.
   If Reddit says "you're doing that too much" the run stops itself, and so does
   a streak of five failures.
 - **If Reddit changes its markup**, a run starts reporting `[?]` on every post.
@@ -173,9 +173,9 @@ snoogrind badges    snoogrind install
 | --- | --- |
 | `--feed=home\|popular\|all\|best` | which feed to walk |
 | `--url=https://…` | any Reddit page instead |
-| `--max=50` | stop after this many shares, 1–1000 |
+| `--max=50` | stop after this many shares, 1 to 1000 |
 | `--scrolls=0` | stop after this many feed scrolls, `0` = until the feed dries up |
-| `--delay=1200-2800` | gap between posts, in ms |
+| `--delay="1200 2800"` | gap between posts, in ms |
 | `--for=2h` | scroll only: how long to keep going, `0` = until stopped |
 | `--subs=pics,books` | getting started: which subreddits to join |
 | `--about=…` `--banner=…` | getting started: your profile text and image |
@@ -195,7 +195,7 @@ startview.go             the getting started setup and checklist
 settings.go              the settings list
 internal/engine/
   browser.go             playwright session, persistent profile, login
-  feed.go                post collection, share -> copy link
+  feed.go                post collection, share → copy link
   run.go                 the feed-walking loop
   scroll.go              the doomscroll loop
   start.go               the getting started ladder

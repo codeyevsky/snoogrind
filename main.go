@@ -1,5 +1,5 @@
 // snoogrind · walks your reddit feed and runs share → copy link on every
-// post, which is what the share achievements count. Browser-driven, so it uses
+// post, which is what the share achievements count. Browser driven, so it uses
 // the login you already have · no API key, no password.
 package main
 
@@ -74,9 +74,9 @@ The subcommands below are the same work without a terminal, for scripts.
 run flags
   --feed=home|popular|all|best     which feed to walk   (default: saved config)
   --url=https://…                  walk any reddit page instead
-  --max=50                         stop after this many shares (1-1000)
+  --max=50                         stop after this many shares, 1 to 1000
   --scrolls=0                      stop after this many scrolls, 0 = no cap
-  --delay=1200-2800                gap between posts, in ms
+  --delay="1200 2800"              gap between posts, in ms
   --browser=chrome|firefox         which browser to drive
   --profile-dir=~/.config/…        drive a browser profile you already use
   --for=2h                         scroll only: how long to keep going, 0 = forever
@@ -122,8 +122,8 @@ func main() {
 	}
 }
 
-// applyFlags folds command-line overrides onto the saved config without
-// persisting them · a one-off `--max=5` should not rewrite the file.
+// applyFlags folds command line overrides onto the saved config without
+// persisting them · a one off `--max=5` should not rewrite the file.
 func applyFlags(c engine.Config, a args) engine.Config {
 	if v := a.str("feed", ""); v != "" {
 		c.Feed = v
@@ -147,7 +147,7 @@ func applyFlags(c engine.Config, a args) engine.Config {
 	if v := a.str("for", ""); v != "" {
 		c.ScrollFor = v
 	}
-	if a.has("dry-run") {
+	if a.has("dry run") {
 		c.DryRun = true
 	}
 	if a.has("headless") {
@@ -170,15 +170,22 @@ func startOpts(a args) engine.StartOptions {
 	return o
 }
 
+// parseRange reads a two number range written any of the ways a person might
+// type it: "300 900", "300,900" or "300-900".
 func parseRange(s string) (int, int, bool) {
-	parts := strings.SplitN(s, "-", 2)
-	lo, err := strconv.Atoi(strings.TrimSpace(parts[0]))
+	parts := strings.FieldsFunc(s, func(r rune) bool {
+		return r == ' ' || r == ',' || r == '-' || r == '\t'
+	})
+	if len(parts) == 0 {
+		return 0, 0, false
+	}
+	lo, err := strconv.Atoi(parts[0])
 	if err != nil {
 		return 0, 0, false
 	}
 	hi := lo
-	if len(parts) == 2 {
-		if v, err := strconv.Atoi(strings.TrimSpace(parts[1])); err == nil {
+	if len(parts) > 1 {
+		if v, err := strconv.Atoi(parts[1]); err == nil {
 			hi = v
 		}
 	}
@@ -194,7 +201,7 @@ func openSession(c engine.Config) (*engine.Session, error) {
 
 // ---------- work, shared by the CLI and the TUI ----------
 
-// doLogin opens reddit and waits for a signed-in session, reporting progress
+// doLogin opens reddit and waits for a signed in session, reporting progress
 // through say so either front end can show it.
 func doLogin(ctx context.Context, c engine.Config, say func(string)) (string, error) {
 	s, err := engine.Open(engine.Opts{Browser: c.Browser, Headless: false, ProfileDir: c.ProfileDir})
@@ -213,7 +220,7 @@ func doLogin(ctx context.Context, c engine.Config, say func(string)) (string, er
 	return who, nil
 }
 
-// ---------- plain-output commands ----------
+// ---------- plain output commands ----------
 
 func cmdInstall(c engine.Config) error {
 	fmt.Println("  " + style.Tint(style.Dim, "fetching the playwright "+c.Browser+" build…"))
@@ -229,7 +236,7 @@ func cmdLogin(ctx context.Context, c engine.Config) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("  " + style.Tint(style.Green, "[✓] session saved · "+orDash(who)))
+	fmt.Println("  " + style.Tint(style.Green, "[✓] session saved · "+orNone(who)))
 	return nil
 }
 
@@ -283,7 +290,7 @@ func cmdScroll(ctx context.Context, c engine.Config) error {
 	return err
 }
 
-// printEvent is the plain-stdout rendering of a walk, for non-TUI runs.
+// printEvent is the plain stdout rendering of a walk, for headless of the TUI runs.
 func printEvent(e engine.Event) {
 	switch e.Kind {
 	case engine.EvStatus:
@@ -327,9 +334,10 @@ func userSuffix(who string) string {
 	return " · u/" + who
 }
 
-func orDash(s string) string {
+// orNone names an empty field without leaning on punctuation.
+func orNone(s string) string {
 	if strings.TrimSpace(s) == "" {
-		return "—"
+		return "none"
 	}
 	return s
 }
@@ -340,13 +348,13 @@ func firstNonEmpty(vals ...string) string {
 			return v
 		}
 	}
-	return "—"
+	return "none"
 }
 
 // ---------- TUI ----------
 
 func runTUI(ctx context.Context) error {
-	// One raw-mode reader for the session · every screen reads from it.
+	// One raw mode reader for the session · every screen reads from it.
 	if err := startKeys(); err != nil {
 		return fmt.Errorf("no interactive terminal here · try `snoogrind --help` for the plain commands")
 	}
@@ -401,7 +409,7 @@ func panelRows() []string {
 
 	// limits mirrors the settings screen, so what you picked there is what you
 	// read here · the four rows, in the same order.
-	limits := fmt.Sprintf("%d shares · %d–%d ms apart · %s scroll · %s",
+	limits := fmt.Sprintf("%d shares · %d to %d ms apart · %s scroll · %s",
 		cfg.MaxShares, cfg.DelayMin, cfg.DelayMax, scrollForLabel(cfg), cfg.Browser)
 	if cfg.Headless {
 		limits += " · headless"
@@ -410,7 +418,7 @@ func panelRows() []string {
 		limits += " · " + style.Tint(style.Cyan, "rehearsal")
 	}
 	return []string{
-		row("account", orDash(st.User)),
+		row("account", orNone(st.User)),
 		row("limits", limits),
 	}
 }
@@ -451,7 +459,7 @@ func screenLogin(ctx context.Context, cfg engine.Config) error {
 	if err != nil {
 		return err
 	}
-	message("login", "", "  "+style.Tint(style.Green, "[✓] session saved · u/"+orDash(who)))
+	message("login", "", "  "+style.Tint(style.Green, "[✓] session saved · u/"+orNone(who)))
 	return nil
 }
 

@@ -69,7 +69,7 @@ func (v *runView) draw() {
 	// counters
 	who := v.user
 	if who == "" {
-		who = "—"
+		who = ","
 	}
 	f.addf("  %s  %s", style.Tint(style.Dim, "u/"+who), style.Tint(style.Dim, v.cfg.URL()))
 	f.addf("  %s  %s  %s  %s  %s",

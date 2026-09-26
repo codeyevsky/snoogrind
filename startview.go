@@ -101,7 +101,7 @@ func (v *startView) draw() {
 }
 
 // startSetup asks for the three things only a Getting Started run needs, as
-// an editable list rather than a pile of command-line flags.
+// an editable list rather than a pile of command line flags.
 func startSetup(cfg engine.Config) (engine.Config, engine.StartOptions, bool) {
 	o := engine.StartOptions{Subs: append([]string(nil), engine.DefaultSubs...)}
 
@@ -261,7 +261,7 @@ func screenStart(ctx context.Context, cfg engine.Config, o engine.StartOptions) 
 	}
 }
 
-// cmdStart is the plain-stdout version, for scripts and ssh.
+// cmdStart is the plain stdout version, for scripts and ssh.
 func cmdStart(ctx context.Context, cfg engine.Config, o engine.StartOptions) error {
 	s, err := openSession(cfg)
 	if err != nil {

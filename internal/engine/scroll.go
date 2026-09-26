@@ -55,7 +55,7 @@ type ScrollOptions struct {
 	Cfg Config
 	For time.Duration // 0 runs until you stop it
 	Ctl *Control
-	On  func(ScrollStats, string) // stats plus a one-line status
+	On  func(ScrollStats, string) // stats plus a one line status
 }
 
 // Doomscroll walks the feed downward and does nothing else · reddit's distance

@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// Feeds are the ready-made walk targets offered in the TUI.
+// Feeds are the ready made walk targets offered in the TUI.
 var Feeds = map[string]string{
 	"home":    "https://www.reddit.com/",
 	"popular": "https://www.reddit.com/r/popular/",
@@ -22,7 +22,7 @@ var FeedOrder = []string{"home", "popular", "all", "best", "custom"}
 
 // MaxSharesCap is the ceiling the UI will accept for one run. Reddit's daily
 // achievement progress is nowhere near this, so it is a guard against a typo
-// turning into an all-night session, not a limit worth tuning.
+// turning into an all night session, not a limit worth tuning.
 const MaxSharesCap = 1000
 
 type Config struct {
@@ -30,9 +30,9 @@ type Config struct {
 	Headless   bool   `json:"headless"`     // reddit's share menu needs a real window; keep false
 	Feed       string `json:"feed"`         // one of Feeds, or "custom"
 	CustomURL  string `json:"custom_url"`   // used when Feed == "custom"
-	MaxShares  int    `json:"max_shares"`   // stop after this many copy-links, 1..MaxSharesCap
+	MaxShares  int    `json:"max_shares"`   // stop after this many copy links, 1..MaxSharesCap
 	MaxScrolls int    `json:"max_scrolls"`  // stop after this many feed scrolls, 0 = no cap
-	DelayMin   int    `json:"delay_min_ms"` // human-like gap between posts
+	DelayMin   int    `json:"delay_min_ms"` // human like gap between posts
 	DelayMax   int    `json:"delay_max_ms"`
 	DryRun     bool   `json:"dry_run"`
 	// ProfileDir is optional · an everyday browser profile to drive instead of

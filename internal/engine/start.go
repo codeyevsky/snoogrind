@@ -48,14 +48,14 @@ var DefaultSearches = []string{
 }
 
 // DefaultSubs are the communities a run joins when you name none. Six, so the
-// five-subreddit badge still lands if one of them refuses.
+// five subreddit badge still lands if one of them refuses.
 var DefaultSubs = []string{
 	"todayilearned", "mildlyinteresting", "AskReddit", "pics", "science", "books",
 }
 
-// GettingStarted works through the seven-badge newcomer ladder. Two of them
-// cannot be automated — a profile needs your own words and a picture, and
-// verification needs a code only you receive — so those report as manual
+// GettingStarted works through the seven badge newcomer ladder. Two of them
+// cannot be automated, a profile needs your own words and a picture, and
+// verification needs a code only you receive, so those report as manual
 // unless you hand the content over.
 func (s *Session) GettingStarted(ctx context.Context, o StartOptions) error {
 	cfg := o.Cfg

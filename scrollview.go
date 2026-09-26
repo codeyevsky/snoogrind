@@ -45,7 +45,7 @@ func (v *scrollView) draw() {
 
 	who := v.user
 	if who == "" {
-		who = "—"
+		who = ","
 	}
 	f.addf("  %s  %s", style.Tint(style.Dim, "u/"+who), style.Tint(style.Dim, v.cfg.URL()))
 	f.blank()
