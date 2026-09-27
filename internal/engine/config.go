@@ -46,10 +46,6 @@ type Config struct {
 	ScrollStepMax  int    `json:"scroll_step_max_px"`
 	ScrollDelayMin int    `json:"scroll_delay_min_ms"` // gap between flicks
 	ScrollDelayMax int    `json:"scroll_delay_max_ms"`
-	// PixelsPerBanana is calibrated, not guessed. One measured hour scrolled
-	// 2,290,137 px and moved reddit's own counter by about 170 bananas, which
-	// is where the default comes from. Measure your own and set it here.
-	PixelsPerBanana float64 `json:"pixels_per_banana"`
 }
 
 func DefaultConfig() Config {
@@ -65,12 +61,11 @@ func DefaultConfig() Config {
 		DelayMin:   1200,
 		DelayMax:   2800,
 
-		ScrollFor:       "1h",
-		ScrollStepMin:   320,
-		ScrollStepMax:   900,
-		ScrollDelayMin:  250,
-		ScrollDelayMax:  700,
-		PixelsPerBanana: 13470,
+		ScrollFor:      "1h",
+		ScrollStepMin:  320,
+		ScrollStepMax:  900,
+		ScrollDelayMin: 250,
+		ScrollDelayMax: 700,
 	}
 }
 
@@ -116,9 +111,6 @@ func (c *Config) Clamp() {
 	}
 	if c.ScrollDelayMax < c.ScrollDelayMin {
 		c.ScrollDelayMax = c.ScrollDelayMin
-	}
-	if c.PixelsPerBanana <= 0 {
-		c.PixelsPerBanana = 13470
 	}
 }
 

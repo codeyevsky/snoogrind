@@ -54,9 +54,6 @@ func (v *scrollView) draw() {
 	f.addf("   %s  %s",
 		style.Tint(style.Orange+";1", v.st.Distance()),
 		style.Tint(style.Dim, "travelled"))
-	f.addf("   %s  %s",
-		style.Tint(style.Ember, fmt.Sprintf("%.0f", v.st.Bananas())),
-		style.Tint(style.Dim, "bananas this session"))
 	f.blank()
 	f.addf("  %s  %s  %s  %s",
 		count("flicks", v.st.Flicks, style.Gray),

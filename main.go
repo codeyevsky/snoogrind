@@ -283,8 +283,8 @@ func cmdScroll(ctx context.Context, c engine.Config) error {
 	if st != nil {
 		fmt.Println()
 		fmt.Printf("  %s\n", style.Tint(style.Orange, fmt.Sprintf(
-			"%s · %.1f bananas · %d flicks · %d posts in %s",
-			st.Distance(), st.Bananas(), st.Flicks, st.Posts, st.Elapsed.Truncate(time.Second))))
+			"%s · %d flicks · %d posts in %s",
+			st.Distance(), st.Flicks, st.Posts, st.Elapsed.Truncate(time.Second))))
 		fmt.Println("  " + style.Tint(style.Dim, "stopped: "+st.Stopped))
 	}
 	return err
@@ -368,7 +368,7 @@ func runTUI(ctx context.Context) error {
 		{{cmd: "login", desc: "sign in to reddit in a real browser window"}},
 		{
 			{cmd: "share", desc: "share → copy link on every post · for the share achievements"},
-			{cmd: "scroll", desc: "scroll for hours · for the banana achievements"},
+			{cmd: "scroll", desc: "scroll for hours · for the scroll distance achievements"},
 			{cmd: "badges", title: "getting started", desc: "all seven getting started achievements"},
 		},
 		{
