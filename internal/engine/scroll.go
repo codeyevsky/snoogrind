@@ -16,8 +16,8 @@ type ScrollStats struct {
 	Elapsed time.Duration
 	Stopped string
 
-	// BananaCM is the length this session counted a banana as.
-	BananaCM float64
+	// PerBanana is the pixels per banana this session counted with.
+	PerBanana float64
 }
 
 // Pixels are CSS pixels, and a CSS inch is 96 of them by definition.
@@ -26,17 +26,18 @@ const pxPerCM = 96 / 2.54
 // Centimetres is the scrolled distance in the units the achievements think in.
 func (s ScrollStats) Centimetres() float64 { return float64(s.Pixels) / pxPerCM }
 
-func (s ScrollStats) bananaCM() float64 {
-	if s.BananaCM > 0 {
-		return s.BananaCM
+func (s ScrollStats) perBanana() float64 {
+	if s.PerBanana > 0 {
+		return s.PerBanana
 	}
-	return 18
+	return 13470
 }
 
-// Bananas converts the distance into reddit's own unit of measurement. Reddit
-// has never said how long its banana is · this is an estimate, and only our
-// own bookkeeping: the badge counter lives on reddit's side.
-func (s ScrollStats) Bananas() float64 { return s.Centimetres() / s.bananaCM() }
+// Bananas converts travelled pixels into reddit's unit. The rate is calibrated
+// against a measured hour rather than worked out from the length of a real
+// banana, which came out twenty times too generous. It is still our own
+// bookkeeping: the badge counter itself lives on reddit's side.
+func (s ScrollStats) Bananas() float64 { return float64(s.Pixels) / s.perBanana() }
 
 // Distance renders the travelled distance the way a human would say it.
 func (s ScrollStats) Distance() string {
@@ -63,7 +64,7 @@ type ScrollOptions struct {
 // the feed travelling at a believable pace for as long as you asked.
 func (s *Session) Doomscroll(ctx context.Context, o ScrollOptions) (*ScrollStats, error) {
 	cfg := o.Cfg
-	st := &ScrollStats{BananaCM: cfg.BananaCM}
+	st := &ScrollStats{PerBanana: cfg.PixelsPerBanana}
 	start := time.Now()
 
 	emit := func(status string) {
